@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Target" value="System.out"/>
+        <param name="Threshold" value="WARN"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="WARNING" />
+            <param name="LevelMax" value="ERROR" />
+        </filter>
+    </appender>
+
+    <appender name="LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="results/CrimeDataInfo.log"/>
+        <param name="Append" value="false"/>
+        <param name="MaxFileSize" value="5000KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <param name="Threshold" value="INFO"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="- %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG" />
+            <param name="LevelMax" value="FATAL" />
+        </filter>
+    </appender>
+
+    <logger name="GetIncidentInfo" additivity="true">
+        <level value="debug"/>
+        <appender-ref ref="LOG"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+</log4j:configuration>
