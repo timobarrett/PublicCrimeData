@@ -37,13 +37,13 @@ public abstract class ProcessIncidentData implements Serializable{
 
     protected int getIncidentCount(){return incidentMap.size();}
 
-    protected void reportIncidentData(Logger logger){
+    protected void reportIncidentData(Logger logger, String cityName){
         mLogger = logger;
         IncidentData id;
 
         Iterator it = incidentMap.entrySet().iterator();
 
-        mLogger.info("   Total Incidents reported = " + getIncidentCount());
+        mLogger.info("   Total Incidents reported = " + getIncidentCount()+ " For " + cityName);
         mLogger.info("-------------------------------------");
 
         while (it.hasNext()) {
@@ -56,6 +56,7 @@ public abstract class ProcessIncidentData implements Serializable{
     protected void dumpTheEntry(IncidentData id) {
         StringBuilder sb = new StringBuilder();
         sb.append("Crime: " + id.getDescription());
+        sb.append(" - " + id.getShortDesc());
         sb.append(" Address: " + id.getAddress());
         sb.append(" Date & Time = "+ id.getDateTime().replace("T","@"));
         if (id.getVictimCnt()!="N/A"){sb.append(" Victims = " + id.getVictimCnt());}

@@ -14,6 +14,7 @@ public class MainActivity {
      */
     private static final Logger LOGGER = Logger.getLogger("GetIncidentInfo");
     private ProcessIncidentData incidentCity = null;
+    private String mCityName;
 
     public static void main(String[] args){
         if (args.length < 1){
@@ -21,34 +22,41 @@ public class MainActivity {
         }else{
             MainActivity mainAct = new MainActivity();
             mainAct.processRequest(args);
-            mainAct.incidentCity.reportIncidentData(LOGGER);
+            mainAct.incidentCity.reportIncidentData(LOGGER,mainAct.mCityName);
         }
     }
 
     private static void usageDisplay(){
-        LOGGER.debug("FUCK YOU ASS WIPE");
-        LOGGER.info("This application works for LA County and it's cities");
-        LOGGER.info("as well as San Francisco and Seattle");
-        LOGGER.info("");
-        LOGGER.info("Example use: ");
-        LOGGER.info("LA Burbank");
-        LOGGER.info("Seattle");
-        LOGGER.info("");
-        LOGGER.info("Crime information is returned for the current year");
+        LOGGER.warn("This application works for LA County and it's cities");
+        LOGGER.warn("as well as San Francisco, Seattle and Chicago");
+        LOGGER.warn("");
+        LOGGER.warn("Example use: ");
+        LOGGER.warn("LA Burbank");
+        LOGGER.warn("Seattle");
+        LOGGER.warn("\"san fran\"");
+        LOGGER.warn("");
+        LOGGER.warn("Crime information is returned for the current year");
+        LOGGER.warn("Data is written to the results folder.");
     }
 
     private boolean processRequest(String[] params){
         String targetCity = params[0].toLowerCase();
         if (targetCity.contains("san fran")){
             incidentCity = new ProcessIncidentDataSanFran(params);
-        }else if (targetCity.contains("seattle")){
+            mCityName = "San Francisco";
+        }else if (targetCity.contains("seattle")) {
             incidentCity = new ProcessIncidentDataSeattle(params);
+            mCityName = "Seattle";
+        }else if (targetCity.contains("chicago")){
+            incidentCity = new ProcessIncidentDataChicago(params);
+            mCityName = "Chicago";
         } else{
             if (params[1].isEmpty()){
                 LOGGER.error("The name of a city is LA County is required - exiting");
                 return false;
             }
             incidentCity = new ProcessIncidentDataLA(params);
+            mCityName = params[1];
         }
         incidentCity.getIncidentData(params);
         return true;
