@@ -16,18 +16,19 @@ import java.net.URL;
 /**
  * Created by tim on 9/9/2016.
  */
-public class ProcessIncidentDataChicago extends ProcessIncidentData {
+public class ProcessIncidentDataBoston extends ProcessIncidentData {
 
-    protected String INCIDENT_BASE_URL = "data.cityofchicago.org";
-    protected String INCIDENT_PATH = "/resource/ijzp-q8t2.json";
-    protected  String QUERY_PARAM_YEAR = "year";
+    final String INCIDENT_BASE_URL = "data.cityofboston.gov";
+    final String INCIDENT_PATH = "/resource/fqn4-4qap.json";
+    final String QUERY_PARAM_YEAR = "year";
 
-    public ProcessIncidentDataChicago(String...params){
-        super(params);
+    public ProcessIncidentDataBoston(String...params){
+        super (params);
         super.setBaseUrl(INCIDENT_BASE_URL);
         super.setIncidentPath(INCIDENT_PATH);
         super.setQueryString(QUERY_PARAM_YEAR + "=" + mCurrentYear);
     }
+
 
     protected void processIncidentData(String jsonStr) throws JSONException{
         IncidentData incident = new IncidentData();
@@ -36,22 +37,16 @@ public class ProcessIncidentDataChicago extends ProcessIncidentData {
         incident.setLongitude(" ");
 
         JSONObject crimeJson = new JSONObject(jsonStr);
-        incident.setDescription(crimeJson.getString("description"));
-        incident.setDateTime(crimeJson.getString("date"));
+        incident.setDescription(crimeJson.getString("offense_description"));
+        incident.setDateTime(crimeJson.getString("occurred_on_date"));
         incident.setGangRelated("N/A");
-        incident.setShortDesc(crimeJson.getString("primary_type"));
-        streetAddr = (crimeJson.getString("block"));
-        incident.setAddress(streetAddr.replace("XX","00"));
+        incident.setShortDesc(crimeJson.getString("offense_code_group"));
+        streetAddr = crimeJson.getString("street");
+        incident.setAddress(streetAddr);
         incident.setVictimCnt("N/A");
         //  JSONArray locInfo = (JSONArray)crimeJson.get("geo_crime_location");
-        if (jsonStr.contains("latitude")) {
-            JSONObject locObj = (JSONObject) crimeJson.get("location");
-            incident.setLatitude(locObj.getString("latitude"));
-        }
-        if (jsonStr.contains("longitude")) {
-            JSONObject locObj = (JSONObject) crimeJson.get("location");
-            incident.setLongitude(locObj.getString("longitude"));
-        }
+        incident.setLatitude(crimeJson.getString("lat"));
+        incident.setLongitude(crimeJson.getString("long"));
         // Log.d(LOG_TAG,"DONE PARSING - SHort Desc" + crimeJson.getString("summarized_offense_description"));
         if(incidentMap.containsKey(streetAddr)){
             incidentMap.put(streetAddr+incident.getDateTime(),incident);

@@ -27,16 +27,16 @@ public class MainActivity {
     }
 
     private static void usageDisplay(){
-        LOGGER.warn("This application works for LA County and it's cities");
-        LOGGER.warn("as well as San Francisco, Seattle and Chicago");
-        LOGGER.warn("");
-        LOGGER.warn("Example use: ");
-        LOGGER.warn("LA Burbank");
-        LOGGER.warn("Seattle");
-        LOGGER.warn("\"san fran\"");
-        LOGGER.warn("");
-        LOGGER.warn("Crime information is returned for the current year");
-        LOGGER.warn("Data is written to the results folder.");
+        LOGGER.error("This application works for LA County and it's cities");
+        LOGGER.error("as well as San Francisco, Seattle, Chicago and Boston");
+        LOGGER.error("");
+        LOGGER.error("Example use: ");
+        LOGGER.error("LA Burbank");
+        LOGGER.error("Seattle");
+        LOGGER.error("\"san fran\"");
+        LOGGER.error("");
+        LOGGER.error("Crime information is returned for the current year");
+        LOGGER.error("Data is written to the results folder.");
     }
 
     private boolean processRequest(String[] params){
@@ -47,9 +47,12 @@ public class MainActivity {
         }else if (targetCity.contains("seattle")) {
             incidentCity = new ProcessIncidentDataSeattle(params);
             mCityName = "Seattle";
-        }else if (targetCity.contains("chicago")){
+        }else if (targetCity.contains("chicago")) {
             incidentCity = new ProcessIncidentDataChicago(params);
             mCityName = "Chicago";
+        }else if (targetCity.contains("boston")){
+            incidentCity = new ProcessIncidentDataBoston(params);
+            mCityName = "Boston";
         } else{
             if (params[1].isEmpty()){
                 LOGGER.error("The name of a city is LA County is required - exiting");
